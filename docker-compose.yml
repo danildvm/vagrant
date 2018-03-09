@@ -1,0 +1,41 @@
+version: "3"
+services:
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile-flask
+    container_name: flask
+    hostname: flask
+    volumes:
+     - ./backend:/backend
+    environment:
+     - FLASK_APP=app.py
+     - FLASK_DEBUG=1
+    ports: 
+     - "5000:5000"
+    depends_on:
+     - db
+    command: bash -c "sleep 30 && flask dropdb && flask initdb && flask insertdata && flask download_and_extract_images && flask run --host=0.0.0.0"
+#    command: ["sh", "/backend/flask_run.sh"]
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile-django 
+    container_name: django
+    hostname: django
+    volumes:
+     - ./client:/frontend
+    ports: 
+     - "8000:8000"
+    depends_on:
+      - flask
+    command: bash -c "sleep 60 && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+#    command: ["sh", "/frontend/django_run.sh"]
+  db:
+    build:
+      context: .
+      dockerfile: DockerDB
+    container_name: db
+    hostname: db
+    ports:
+     - "5432:5432"
