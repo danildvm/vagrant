@@ -16,7 +16,7 @@ class Config(object):
 
     WTF_CSRF_SECRET_KEY = 'ezj+e4m@auyzke$5)rnc%r!3%enk5%!lmwb22^md2_okgnqem0'
 
-    SQLALCHEMY_DATABASE_URI = 'postgres://docker:docker@192.168.0.200/docker'
+    SQLALCHEMY_DATABASE_URI = 'postgres://docker:docker@192.168.0.100/docker'
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

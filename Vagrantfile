@@ -15,18 +15,10 @@ Vagrant.configure("2") do |config|
     dock.vm.network "forwarded_port", guest: 5000, host: 5000
     dock.vm.network "forwarded_port", guest: 8000, host: 8000
     dock.vm.network :private_network, ip: "192.168.0.100"
-    
-  # config.vm.provision "shell", inline: <<-SHELL
-  #    apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+
    dock.vm.provision :docker
-   dock.vm.provision :shell, path: "/home/danil/task1/compose.sh"
-  #config.vm.provision :shell do |shell|
-  #    shell.path="/vagrant/compose.sh"
-  # end
-  # config.vm.provision :docker
-  # dock.vm.provision :docker_compose, rebuild: true, run: "always", yml: "/vagrant/docker-compose.yml"
+   dock.vm.provision :shell, path: "compose.sh"
+#   dock.vm.provision :docker_compose, rebuild: true, run: "always", yml: "/vagrant/docker-compose.yml"
   end
   config.vm.define "postgres" do |ps|
     ps.vm.box = "ubuntu/trusty64"
@@ -35,9 +27,7 @@ Vagrant.configure("2") do |config|
     ps.ssh.password = "vagrant"
     ps.vm.network "forwarded_port", guest: 5432, host: 5432
     ps.vm.network :private_network, ip: "192.168.0.200"
-#    ps.vm.synced_folder "/home/danil/task1/", "/vagrant"
-    ps.vm.provision :shell, path: "/home/danil/task1/postgres.sh"
-#      shell.path="/vagrant/postgres.sh"
+    ps.vm.provision :shell, path: "postgres.sh"
   end
   config.vm.provider "virtualbox" do |vb|
   #   # Display the VirtualBox GUI when booting the machine
@@ -45,5 +35,5 @@ Vagrant.configure("2") do |config|
   #   # Customize the amount of memory on the VM:
      vb.memory = "512"
   end
-  config.vm.synced_folder "/home/danil/task1/", "/vagrant"
+  config.vm.synced_folder "./", "/vagrant"
 end
